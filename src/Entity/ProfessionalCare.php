@@ -16,11 +16,11 @@ class ProfessionalCare
     #[ORM\Column]
     private ?int $revenue_id = null;
 
-    #[ORM\Column]
-    private ?int $client_id = null;
+    #[ORM\Column(length: 11)]
+    private ?string $client_id = null;
 
-    #[ORM\Column]
-    private ?int $professional_id = null;
+    #[ORM\Column(length: 11)]
+    private ?string $professional_id = null;
 
     #[ORM\Column]
     private ?\DateTime $dt_service = null;
@@ -49,24 +49,24 @@ class ProfessionalCare
         return $this;
     }
 
-    public function getClientId(): ?int
+    public function getClientId(): ?string
     {
         return $this->client_id;
     }
 
-    public function setClientId(int $client_id): static
+    public function setClientId(string $client_id): static
     {
         $this->client_id = $client_id;
 
         return $this;
     }
 
-    public function getProfessionalId(): ?int
+    public function getProfessionalId(): ?string
     {
         return $this->professional_id;
     }
 
-    public function setProfessionalId(int $professional_id): static
+    public function setProfessionalId(string $professional_id): static
     {
         $this->professional_id = $professional_id;
 

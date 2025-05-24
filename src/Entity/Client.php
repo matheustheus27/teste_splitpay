@@ -10,8 +10,8 @@ class Client
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    #[ORM\Column(length: 11)]
+    private ?string $id = null;
 
     #[ORM\Column(length: 30)]
     private ?string $name = null;
@@ -22,12 +22,12 @@ class Client
     #[ORM\Column(length: 20, nullable: true)]
     private ?string $phone = null;
 
-    public function getId(): ?int
+    public function getId(): ?string
     {
         return $this->id;
     }
 
-    public function setId(int $id): static
+    public function setId(string $id): static
     {
         $this->id = $id;
 
