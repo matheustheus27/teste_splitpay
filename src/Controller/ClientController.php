@@ -9,18 +9,93 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
-use OpenApi\Annotations as OA;
+use OpenApi\Attributes as OA;
 
 #[Route('/api/client', name: 'api_client')]
+#[OA\Tag(name: 'Clientes')]
 final class ClientController extends AbstractController
 {
     #[Route('', methods: ['GET'])]
+    #[OA\Response(
+        response: 200,
+        description: 'Lista todos os clientes',
+        content: new OA\JsonContent(
+            properties: [
+                new OA\Property(property: 'id', type: 'string', example: "11111111111"),
+                new OA\Property(property: 'name', type: 'string', example: "Jose da Silva"),
+                new OA\Property(property: 'email', type: 'string', example: "jose@teste.com"),
+                new OA\Property(property: 'phone', type: 'string', example: "(31) 99999-9999"),
+            ],
+            examples: [
+                new OA\Examples(
+                    example: 'multiple_clients_example',
+                    summary: 'Exemplo de múltiplos clientes na resposta',
+                    value: [ 
+                        [
+                            'id' => "11111111111",
+                            'name' => "Jose da Silva",
+                            'email' => "jose@teste.com",
+                            'phone' => "(31) 99999-9999"
+                        ],
+                        [
+                            'id' => "22222222222",
+                            'name' => "Maria Oliveira",
+                            'email' => "maria@teste.com",
+                            'phone' => "(31) 88888-8888"
+                        ]
+                    ]
+                )
+            ]
+        )
+    )]
+    #[OA\Summary(summary: 'Obtém a lista de clientes')]
     public function index(ClientRepository $repo): JsonResponse
     {
         return $this->json($repo->findAll());
     }
 
     #[Route('', methods: ['POST'])]
+    #[OA\Parameter(
+        name: 'id',
+        in: 'path',
+        required: true,
+        description: 'ID do cliente (CPF)',
+        example: "11111111111"
+    )]
+    #[OA\Parameter(
+        name: 'name',
+        in: 'path',
+        required: true,
+        description: 'Nome do cliente',
+        example: "Jose da Silva"
+    )]
+    #[OA\Parameter(
+        name: 'email',
+        in: 'path',
+        required: false,
+        description: 'Email do cliente',
+        example: "jose@teste.com"
+    )]
+    #[OA\Parameter(
+        name: 'phone',
+        in: 'path',
+        required: false,
+        description: 'Telefone do cliente',
+        example: "(31) 99999-9999"
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Retorna as informações do cliente',
+        content: new OA\JsonContent(
+            properties: [
+                new OA\Property(property: 'id', type: 'string', example: "11111111111"),
+                new OA\Property(property: 'name', type: 'string', example: "Jose da Silva"),
+                new OA\Property(property: 'email', type: 'string', example: "jose@teste.com"),
+                new OA\Property(property: 'phone', type: 'string', example: "(31) 99999-9999"),
+            ]
+        )
+    )]
+    #[OA\Summary(summary: 'Cadastra as informações do cliente')]
     public function create(Request $request, EntityManagerInterface $em): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
@@ -39,12 +114,73 @@ final class ClientController extends AbstractController
     }
 
     #[Route('/{id}', methods: ['GET'])]
+    #[OA\Parameter(
+        name: 'id',
+        in: 'path',
+        required: true,
+        description: 'ID do cliente (CPF)',
+        example: "11111111111"
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Retorna as informações de um cliente',
+        content: new OA\JsonContent(
+            properties: [
+                new OA\Property(property: 'id', type: 'string', example: "11111111111"),
+                new OA\Property(property: 'name', type: 'string', example: "Jose da Silva"),
+                new OA\Property(property: 'email', type: 'string', example: "jose@teste.com"),
+                new OA\Property(property: 'phone', type: 'string', example: "(31) 99999-9999"),
+            ]
+        )
+    )]
+    #[OA\Summary(summary: 'Obtém um cliente por ID')]
     public function show(Client $client): JsonResponse
     {
         return $this->json($client);
     }
 
     #[Route('/{id}', methods: ['PUT'])]
+    #[OA\Parameter(
+        name: 'id',
+        in: 'path',
+        required: true,
+        description: 'ID do cliente (CPF)',
+        example: "11111111111"
+    )]
+    #[OA\Parameter(
+        name: 'name',
+        in: 'path',
+        required: true,
+        description: 'Nome do cliente',
+        example: "Jose da Silva"
+    )]
+    #[OA\Parameter(
+        name: 'email',
+        in: 'path',
+        required: false,
+        description: 'Email do cliente',
+        example: "jose@teste.com"
+    )]
+    #[OA\Parameter(
+        name: 'phone',
+        in: 'path',
+        required: false,
+        description: 'Telefone do cliente',
+        example: "(31) 99999-9999"
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Retorna as informações do cliente',
+        content: new OA\JsonContent(
+            properties: [
+                new OA\Property(property: 'id', type: 'string', example: "11111111111"),
+                new OA\Property(property: 'name', type: 'string', example: "Jose da Silva"),
+                new OA\Property(property: 'email', type: 'string', example: "jose@teste.com"),
+                new OA\Property(property: 'phone', type: 'string', example: "(31) 99999-9999"),
+            ]
+        )
+    )]
+    #[OA\Summary(summary: 'Atualiza as informações do cliente')]
     public function update(Request $request, Client $client, EntityManagerInterface $em): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
@@ -59,6 +195,18 @@ final class ClientController extends AbstractController
     }
 
     #[Route('/{id}', methods: ['DELETE'])]
+    #[OA\Parameter(
+        name: 'id',
+        in: 'path',
+        required: true,
+        description: 'ID do cliente (CPF)',
+        example: "11111111111"
+    )]
+    #[OA\Response(
+        response: 204,
+        description: 'Retorna as informações de um cliente',
+    )]
+    #[OA\Summary(summary: 'Remove um cliente')]
     public function delete(Client $client, EntityManagerInterface $em): JsonResponse
     {
         $em->remove($client);
