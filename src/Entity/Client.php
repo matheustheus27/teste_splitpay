@@ -9,7 +9,6 @@ use Doctrine\ORM\Mapping as ORM;
 class Client
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
     #[ORM\Column(length: 11)]
     private ?string $id = null;
 
