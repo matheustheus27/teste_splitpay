@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/professional/care', name: 'api_professional_care')]
+#[Route('/api/professional/care', name: 'api_professional_care')]
 final class ProfessionalCareController extends AbstractController
 {
     #[Route('', methods: ['GET'])]

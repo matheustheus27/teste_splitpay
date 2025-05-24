@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/client', name: 'api_client')]
+#[Route('/api/client', name: 'api_client')]
 final class ClientController extends AbstractController
 {
     #[Route('', methods: ['GET'])]

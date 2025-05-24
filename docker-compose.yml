@@ -1,0 +1,32 @@
+version: "3.9"
+
+services:
+  php:
+    build: .
+    container_name: splitpay-app
+    volumes:
+      - ./:/app
+    working_dir: /app
+    depends_on:
+      - db
+    ports:
+      - "8000:8000"
+    command: php -S 0.0.0.0:8000 -t public
+
+  db:
+    image: mysql:8.0
+    container_name: splitpay-db
+    restart: always
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_DATABASE: splitpay
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: splitpay
+      MYSQL_PASSWORD: splitpay123
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+
+volumes:
+  db_data:

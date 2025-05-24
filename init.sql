@@ -1,25 +1,25 @@
 create table client (
-    id varchar2(11) primary key,
-    name varchar2(30) not null,
-    email varchar2(255),
-    phone varchar2(20)
+    id varchar(11) primary key,
+    name varchar(30) not null,
+    email varchar(255),
+    phone varchar(20)
 );
 
 create table professional (
-    id varchar2(11) primary key,
-    name varchar2(30) not null,
-    specialty varchar2(30) not null
+    id varchar(11) primary key,
+    name varchar(30) not null,
+    specialty varchar(30) not null
 );
 
 create table product (
     id int primary key,
-    name varchar2(30) not null,
+    name varchar(30) not null,
     price decimal(10, 2) not null
 );
 
 create table service (
     id int primary key,
-    name varchar2(30) not null,
+    name varchar(30) not null,
     price decimal(10, 2) not null
 );
 
@@ -31,8 +31,8 @@ create table revenue (
 create table professionalcare (
     id int primary key,
     revenue_id int not null,
-    client_id varchar2(11) not null,
-    professional_id varchar2(11),
+    client_id varchar(11) not null,
+    professional_id varchar(11),
     dt_service datetime not null,
     foreign key (revenue_id) references revenue(id) on delete cascade,
     foreign key (client_id) references client(id),
@@ -43,7 +43,7 @@ create table payment (
     id int primary key,
     revenue_id int not null,
     amount decimal(10, 2) not null,
-    method varchar2(20),
+    method varchar(20),
     dt_payment datetime not null
 );
 

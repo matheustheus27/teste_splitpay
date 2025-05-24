@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/payment', name: 'api_payment')]
+#[Route('/api/payment', name: 'api_payment')]
 final class PaymentController extends AbstractController
 {
     #[Route('', methods: ['GET'])]
