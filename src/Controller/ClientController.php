@@ -48,7 +48,6 @@ final class ClientController extends AbstractController
             ]
         )
     )]
-    #[OA\Summary(summary: 'Obtém a lista de clientes')]
     public function index(ClientRepository $repo): JsonResponse
     {
         return $this->json($repo->findAll());
@@ -84,7 +83,7 @@ final class ClientController extends AbstractController
         example: "(31) 99999-9999"
     )]
     #[OA\Response(
-        response: 200,
+        response: 201,
         description: 'Retorna as informações do cliente',
         content: new OA\JsonContent(
             properties: [
@@ -95,7 +94,6 @@ final class ClientController extends AbstractController
             ]
         )
     )]
-    #[OA\Summary(summary: 'Cadastra as informações do cliente')]
     public function create(Request $request, EntityManagerInterface $em): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
@@ -133,7 +131,6 @@ final class ClientController extends AbstractController
             ]
         )
     )]
-    #[OA\Summary(summary: 'Obtém um cliente por ID')]
     public function show(Client $client): JsonResponse
     {
         return $this->json($client);
@@ -150,7 +147,7 @@ final class ClientController extends AbstractController
     #[OA\Parameter(
         name: 'name',
         in: 'path',
-        required: true,
+        required: false,
         description: 'Nome do cliente',
         example: "Jose da Silva"
     )]
@@ -180,14 +177,13 @@ final class ClientController extends AbstractController
             ]
         )
     )]
-    #[OA\Summary(summary: 'Atualiza as informações do cliente')]
     public function update(Request $request, Client $client, EntityManagerInterface $em): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
 
-        $client->setName($data['name']);
-        $client->setEmail($data['email']);
-        $client->setPhone($data['phone']);
+        if(isset($data['name'])) $client->setName($data['name']);
+        if(isset($data['email'])) $client->setEmail($data['email']);
+        if(isset($data['phone'])) $client->setPhone($data['phone']);
 
         $em->flush();
 
@@ -204,9 +200,8 @@ final class ClientController extends AbstractController
     )]
     #[OA\Response(
         response: 204,
-        description: 'Retorna as informações de um cliente',
+        description: 'Retorna um json vazio',
     )]
-    #[OA\Summary(summary: 'Remove um cliente')]
     public function delete(Client $client, EntityManagerInterface $em): JsonResponse
     {
         $em->remove($client);
