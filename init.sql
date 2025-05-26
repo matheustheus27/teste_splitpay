@@ -47,7 +47,7 @@ create table payment (
     amount decimal(10, 2) not null,
     method varchar(20),
     dt_payment datetime not null,
-    foreign key (revenue_id) references revenue(id) on delete cascade,
+    foreign key (revenue_id) references revenue(id) on delete cascade
 );
 
 create table productcare (
@@ -72,8 +72,8 @@ create table servicecare (
 insert into client values ('11111111111', 'José da Silva', 'jose@teste.com', '(31) 99999-9999');
 insert into client values ('22222222222', 'Maria Oliveira', 'maria@teste.com', '(31) 88888-8888');
 
-insert into client values ('11111111111', 'Dr Guilherme de Paula', 'Clinico Geral');
-insert into client values ('22222222222', 'Dra Maria Alencar', 'Psquiatria');
+insert into professional values ('11111111111', 'Dr Guilherme de Paula', 'Clinico Geral');
+insert into professional values ('22222222222', 'Dra Maria Alencar', 'Psquiatria');
 
 insert into product values (10, 'Dipirona 1mg', 15.3);
 insert into product values (11, 'Histamin 2mg', 11.99);
@@ -81,14 +81,14 @@ insert into product values (11, 'Histamin 2mg', 11.99);
 insert into service values (10, 'Consulta', 120);
 insert into service values (11, 'Exame', 65.25);
 
-insert into revenue values (10, '25/05/2025');
-insert into revenue values (11, '24/05/2025');
+insert into revenue values (10, '2025-05-24');
+insert into revenue values (11, '2025-05-25');
 
-insert into professionalcare values (10, 10, '11111111111', '22222222222', '25/05/2025');
-insert into professionalcare values (11, 11, '22222222222', '11111111111', '25/05/2025');
+insert into professionalcare values (10, 10, '11111111111', '22222222222', '2025-05-24');
+insert into professionalcare values (11, 11, '22222222222', '11111111111', '2025-05-25');
 
-insert into payment values (10, 10, 150.95, 'PIX', '25/05/2025');
-insert into payment values (11, 10, 145.32, 'DEBITO', '24/05/2025');
+insert into payment values (10, 10, 150.95, 'PIX', '2025-05-24');
+insert into payment values (11, 10, 145.32, 'DEBITO', '2025-05-25');
 
 insert into productcare values (10, 10);
 insert into productcare values (10, 11);

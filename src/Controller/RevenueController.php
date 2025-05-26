@@ -16,31 +16,40 @@ use OpenApi\Attributes as OA;
 final class RevenueController extends AbstractController
 {
     #[Route('', methods: ['GET'])]
-    #[OA\Response(
-        response: 200,
-        description: 'Lista todas as receitas',
-        content: new OA\JsonContent(
-            properties: [
-                new OA\Property(property: 'id', type: 'int', example: 10),
-                new OA\Property(property: 'dt_creation', type: 'string', example: "25/05/2025"),
-            ],
-            examples: [
-                new OA\Examples(
-                    example: 'multiple_payment_example',
-                    summary: 'Exemplo de múltiplos pagamentos na resposta',
-                    value: [ 
-                        [
-                            'id' => 10,
-                            'dt_creation' => "25/05/2025"
-                        ],
-                        [
-                            'id' => 11,
-                            'dt_creation' => "24/05/2025"
+    #[OA\Get(
+        path: '/api/revenue',
+        summary: 'Lista todos as receitas',
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Lista todos as receitas',
+                content: new OA\JsonContent(
+                    type: 'array',
+                    items: new OA\Items(
+                        properties: [
+                            new OA\Property(property: 'id', type: 'int', example: 10),
+                            new OA\Property(property: 'dt_creation', type: 'string', example: "2025-05-25"),
                         ]
+                    ),
+                    examples: [
+                        new OA\Examples(
+                            example: 'multiple_revenue_example',
+                            summary: 'Exemplo de múltiplas receitas na resposta',
+                            value: [ 
+                                [
+                                    'id' => 10,
+                                    'dt_creation' => "2025-05-24"
+                                ],
+                                [
+                                    'id' => 11,
+                                    'dt_creation' => "2025-05-25"
+                                ]
+                            ]
+                        )
                     ]
                 )
-            ]
-        )
+            )
+        ]
     )]
     public function index(RevenueRepository $repo): JsonResponse
     {
@@ -48,29 +57,32 @@ final class RevenueController extends AbstractController
     }
 
     #[Route('', methods: ['POST'])]
-    #[OA\Parameter(
-        name: 'id',
-        in: 'path',
-        required: true,
-        description: 'ID da receita',
-        example: 10
-    )]
-    #[OA\Parameter(
-        name: 'dt_creation',
-        in: 'path',
-        required: true,
-        description: 'Data da receita',
-        example: "25/05/2025"
-    )]
-    #[OA\Response(
-        response: 201,
-        description: 'Retorna as informações da receita',
-        content: new OA\JsonContent(
-            properties: [
-                new OA\Property(property: 'id', type: 'int', example: 10),
-                new OA\Property(property: 'dt_creation', type: 'string', example: "25/05/2025"),
-            ]
-        )
+    #[OA\Post(
+        path: '/api/revenue',
+        summary: 'Cria uma nova receita',
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                required: ['id', 'dt_creation'],
+                properties: [
+                    new OA\Property(property: 'id', type: 'int', example: 10),
+                    new OA\Property(property: 'dt_creation', type: 'string', example: "2025-05-25"),
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(
+                response: 201,
+                description: 'Retorna as informações da receita',
+                content: new OA\JsonContent(
+                    type: 'object',
+                    properties: [
+                        new OA\Property(property: 'id', type: 'int', example: 10),
+                        new OA\Property(property: 'dt_creation', type: 'string', example: "2025-05-25"),
+                    ]
+                )
+            )
+        ]
     )]
     public function create(Request $request, EntityManagerInterface $em): JsonResponse
     {
@@ -88,22 +100,32 @@ final class RevenueController extends AbstractController
     }
 
     #[Route('/{id}', methods: ['GET'])]
-    #[OA\Parameter(
-        name: 'id',
-        in: 'path',
-        required: true,
-        description: 'ID da receita',
-        example: 10
-    )]
-    #[OA\Response(
-        response: 200,
-        description: 'Retorna as informações da receita',
-        content: new OA\JsonContent(
-            properties: [
-                new OA\Property(property: 'id', type: 'int', example: 10),
-                new OA\Property(property: 'dt_creation', type: 'string', example: "25/05/2025"),
-            ]
-        )
+    #[OA\Get(
+        path: '/api/revenue/{id}',
+        summary: 'Busca uma receita pelo ID',
+        parameters: [
+            new OA\Parameter(
+                name: 'id',
+                in: 'path',
+                required: true,
+                description: 'ID da receita',
+                schema: new OA\Schema(type: 'integer'),
+                example: 10
+            )
+        ],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Retorna as informações de uma receita',
+                content: new OA\JsonContent(
+                    type: 'object',
+                    properties: [
+                        new OA\Property(property: 'id', type: 'int', example: 10),
+                        new OA\Property(property: 'dt_creation', type: 'string', example: "2025-05-25"),
+                    ]
+                )
+            )
+        ]
     )]
     public function show(Revenue $revenue): JsonResponse
     {
@@ -111,29 +133,42 @@ final class RevenueController extends AbstractController
     }
 
     #[Route('/{id}', methods: ['PUT'])]
-    #[OA\Parameter(
-        name: 'id',
-        in: 'path',
-        required: true,
-        description: 'ID da receita',
-        example: 10
-    )]
-    #[OA\Parameter(
-        name: 'dt_creation',
-        in: 'path',
-        required: false,
-        description: 'Data da receita',
-        example: "25/05/2025"
-    )]
-    #[OA\Response(
-        response: 201,
-        description: 'Retorna as informações da receita',
-        content: new OA\JsonContent(
-            properties: [
-                new OA\Property(property: 'id', type: 'int', example: 10),
-                new OA\Property(property: 'dt_creation', type: 'string', example: "25/05/2025"),
-            ]
-        )
+    #[OA\Put(
+        path: '/api/revenue/{id}',
+        summary: 'Atualiza os dados de uma receita pelo ID',
+        parameters: [
+            new OA\Parameter(
+                name: 'id',
+                in: 'path',
+                required: true,
+                description: 'ID da receita',
+                schema: new OA\Schema(type: 'integer'),
+                example: 10
+            )
+        ],
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                type: 'object',
+                properties: [
+                    new OA\Property(property: 'id', type: 'int', example: 10),
+                new OA\Property(property: 'dt_creation', type: 'string', example: "2025-05-25"),
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Retorna as informações atualizadas da receita',
+                content: new OA\JsonContent(
+                    type: 'object',
+                    properties: [
+                        new OA\Property(property: 'id', type: 'int', example: 10),
+                        new OA\Property(property: 'dt_creation', type: 'string', example: "2025-05-25"),
+                    ]
+                )
+            )
+        ]
     )]
     public function update(Request $request, Revenue $revenue, EntityManagerInterface $em): JsonResponse
     {
@@ -147,16 +182,25 @@ final class RevenueController extends AbstractController
     }
 
     #[Route('/{id}', methods: ['DELETE'])]
-    #[OA\Parameter(
-        name: 'id',
-        in: 'path',
-        required: true,
-        description: 'ID da receita',
-        example: 10
-    )]
-    #[OA\Response(
-        response: 204,
-        description: 'Retorna um json vazio',
+    #[OA\Delete(
+        path: '/api/revenue/{id}',
+        summary: 'Remove uma receita pelo ID',
+        parameters: [
+            new OA\Parameter(
+                name: 'id',
+                in: 'path',
+                required: true,
+                description: 'ID do pagamento',
+                schema: new OA\Schema(type: 'integer'),
+                example: 10
+            )
+        ],
+        responses: [
+            new OA\Response(
+                response: 204,
+                description: 'Receita removido com sucesso (sem conteúdo)'
+            )
+        ]
     )]
     public function delete(Revenue $revenue, EntityManagerInterface $em): JsonResponse
     {

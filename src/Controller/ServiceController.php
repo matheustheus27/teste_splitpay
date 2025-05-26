@@ -16,34 +16,43 @@ use OpenApi\Attributes as OA;
 final class ServiceController extends AbstractController
 {
     #[Route('', methods: ['GET'])]
-    #[OA\Response(
-        response: 200,
-        description: 'Lista todos os serviços',
-        content: new OA\JsonContent(
-            properties: [
-                new OA\Property(property: 'id', type: 'int', example: 10),
-                new OA\Property(property: 'name', type: 'string', example: "Consulta"),
-                new OA\Property(property: 'price', type: 'number', format: 'float', example: 120),
-            ],
-            examples: [
-                new OA\Examples(
-                    example: 'multiple_service_example',
-                    summary: 'Exemplo de múltiplos serviços na resposta',
-                    value: [ 
-                        [
-                            'id' => 10,
-                            'name' => "Consulta",
-                            'price' => 120,
-                        ],
-                        [
-                            'id' => 11,
-                            'name' => "Exame",
-                            'price' => 65.25,
+    #[OA\Get(
+        path: '/api/service',
+        summary: 'Lista todos os serviços',
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Lista todos os serviços',
+                content: new OA\JsonContent(
+                    type: 'array',
+                    items: new OA\Items(
+                        properties: [
+                            new OA\Property(property: 'id', type: 'int', example: 10),
+                            new OA\Property(property: 'name', type: 'string', example: "Consulta"),
+                            new OA\Property(property: 'price', type: 'number', format: 'float', example: 120),
                         ]
+                    ),
+                    examples: [
+                        new OA\Examples(
+                            example: 'multiple_service_example',
+                            summary: 'Exemplo de múltiplos serviços na resposta',
+                            value: [ 
+                                [
+                                    'id' => 10,
+                                    'name' => "Consulta",
+                                    'price' => 120,
+                                ],
+                                [
+                                    'id' => 11,
+                                    'name' => "Exame",
+                                    'price' => 65.25,
+                                ]
+                            ]
+                        )
                     ]
                 )
-            ]
-        )
+            )
+        ]
     )]
     public function index(ServiceRepository $repo): JsonResponse
     {
@@ -51,37 +60,34 @@ final class ServiceController extends AbstractController
     }
 
     #[Route('', methods: ['POST'])]
-    #[OA\Parameter(
-        name: 'id',
-        in: 'path',
-        required: true,
-        description: 'ID do serviço',
-        example: 10
-    )]
-    #[OA\Parameter(
-        name: 'name',
-        in: 'path',
-        required: true,
-        description: 'Nome do serviço',
-        example: "Consulta"
-    )]
-    #[OA\Parameter(
-        name: 'price',
-        in: 'path',
-        required: true,
-        description: 'Valor do produto',
-        example: 120
-    )]
-    #[OA\Response(
-        response: 201,
-        description: 'Retorna as informações do serviço',
-        content: new OA\JsonContent(
-            properties: [
-                new OA\Property(property: 'id', type: 'int', example: 10),
-                new OA\Property(property: 'name', type: 'string', example: "Consulta"),
-                new OA\Property(property: 'price', type: 'number', format: 'float', example: 120),
-            ]
-        )
+    #[OA\Post(
+        path: '/api/service',
+        summary: 'Cria um novo serviço',
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                required: ['id', 'name', 'price'],
+                properties: [
+                    new OA\Property(property: 'id', type: 'int', example: 10),
+                    new OA\Property(property: 'name', type: 'string', example: "Consulta"),
+                    new OA\Property(property: 'price', type: 'number', format: 'float', example: 120),
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(
+                response: 201,
+                description: 'Retorna as informações do serviço',
+                content: new OA\JsonContent(
+                    type: 'object',
+                    properties: [
+                        new OA\Property(property: 'id', type: 'int', example: 10),
+                        new OA\Property(property: 'name', type: 'string', example: "Consulta"),
+                        new OA\Property(property: 'price', type: 'number', format: 'float', example: 120),
+                    ]
+                )
+            )
+        ]
     )]
     public function create(Request $request, EntityManagerInterface $em): JsonResponse
     {
@@ -100,23 +106,33 @@ final class ServiceController extends AbstractController
     }
 
     #[Route('/{id}', methods: ['GET'])]
-    #[OA\Parameter(
-        name: 'id',
-        in: 'path',
-        required: true,
-        description: 'ID do serviço',
-        example: 10
-    )]
-    #[OA\Response(
-        response: 200,
-        description: 'Retorna as informações de um serviço',
-        content: new OA\JsonContent(
-            properties: [
-                new OA\Property(property: 'id', type: 'int', example: 10),
-                new OA\Property(property: 'name', type: 'string', example: "Consulta"),
-                new OA\Property(property: 'price', type: 'number', format: 'float', example: 120),
-            ]
-        )
+    #[OA\Get(
+        path: '/api/service/{id}',
+        summary: 'Busca um serviço pelo ID',
+        parameters: [
+            new OA\Parameter(
+                name: 'id',
+                in: 'path',
+                required: true,
+                description: 'ID do serviço',
+                schema: new OA\Schema(type: 'integer'),
+                example: 10
+            )
+        ],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Retorna as informações de um serviço',
+                content: new OA\JsonContent(
+                    type: 'object',
+                    properties: [
+                        new OA\Property(property: 'id', type: 'int', example: 10),
+                        new OA\Property(property: 'name', type: 'string', example: "Consulta"),
+                        new OA\Property(property: 'price', type: 'number', format: 'float', example: 120),
+                    ]
+                )
+            )
+        ]
     )]
     public function show(Service $service): JsonResponse
     {
@@ -124,37 +140,43 @@ final class ServiceController extends AbstractController
     }
 
     #[Route('/{id}', methods: ['PUT'])]
-    #[OA\Parameter(
-        name: 'id',
-        in: 'path',
-        required: true,
-        description: 'ID do serviço',
-        example: 10
-    )]
-    #[OA\Parameter(
-        name: 'name',
-        in: 'path',
-        required: false,
-        description: 'Nome do serviço',
-        example: "Consulta"
-    )]
-    #[OA\Parameter(
-        name: 'price',
-        in: 'path',
-        required: false,
-        description: 'Valor do produto',
-        example: 120
-    )]
-    #[OA\Response(
-        response: 200,
-        description: 'Retorna as informações do serviço',
-        content: new OA\JsonContent(
-            properties: [
-                new OA\Property(property: 'id', type: 'int', example: 10),
-                new OA\Property(property: 'name', type: 'string', example: "Consulta"),
-                new OA\Property(property: 'price', type: 'number', format: 'float', example: 120),
-            ]
-        )
+    #[OA\Put(
+        path: '/api/service/{id}',
+        summary: 'Atualiza os dados de um serviço pelo ID',
+        parameters: [
+            new OA\Parameter(
+                name: 'id',
+                in: 'path',
+                required: true,
+                description: 'ID do serviço',
+                schema: new OA\Schema(type: 'integer'),
+                example: 10
+            )
+        ],
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                type: 'object',
+                properties: [
+                    new OA\Property(property: 'name', type: 'string', example: "Consulta"),
+                    new OA\Property(property: 'price', type: 'number', format: 'float', example: 120),
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Retorna as informações atualizadas do serviço',
+                content: new OA\JsonContent(
+                    type: 'object',
+                    properties: [
+                        new OA\Property(property: 'id', type: 'int', example: 10),
+                        new OA\Property(property: 'name', type: 'string', example: "Consulta"),
+                        new OA\Property(property: 'price', type: 'number', format: 'float', example: 120),
+                    ]
+                )
+            )
+        ]
     )]
     public function update(Request $request, Service $service, EntityManagerInterface $em): JsonResponse
     {
@@ -169,16 +191,25 @@ final class ServiceController extends AbstractController
     }
 
     #[Route('/{id}', methods: ['DELETE'])]
-    #[OA\Parameter(
-        name: 'id',
-        in: 'path',
-        required: true,
-        description: 'ID do serviço',
-        example: 10
-    )]
-    #[OA\Response(
-        response: 204,
-        description: 'Retorna um json vazio',
+    #[OA\Delete(
+        path: '/api/service/{id}',
+        summary: 'Remove um serviço pelo ID',
+        parameters: [
+            new OA\Parameter(
+                name: 'id',
+                in: 'path',
+                required: true,
+                description: 'ID do serviço',
+                schema: new OA\Schema(type: 'integer'),
+                example: 10
+            )
+        ],
+        responses: [
+            new OA\Response(
+                response: 204,
+                description: 'Serviço removido com sucesso (sem conteúdo)'
+            )
+        ]
     )]
     public function delete(Service $service, EntityManagerInterface $em): JsonResponse
     {

@@ -16,34 +16,43 @@ use OpenApi\Attributes as OA;
 final class ProfessionalController extends AbstractController
 {
     #[Route('', methods: ['GET'])]
-    #[OA\Response(
-        response: 200,
-        description: 'Lista todos os profissionais',
-        content: new OA\JsonContent(
-            properties: [
-                new OA\Property(property: 'id', type: 'string', example: "11111111111"),
-                new OA\Property(property: 'name', type: 'string', example: "Dr Guilherme de Paula"),
-                new OA\Property(property: 'specialty', type: 'string', example: "Clinico Geral"),
-            ],
-            examples: [
-                new OA\Examples(
-                    example: 'multiple_profissionais_example',
-                    summary: 'Exemplo de múltiplos profissionais na resposta',
-                    value: [ 
-                        [
-                            'id' => "11111111111",
-                            'name' => "Dr Guilherme de Paula",
-                            'specialty' => "Clinico Geral",
-                        ],
-                        [
-                            'id' => "22222222222",
-                            'name' => "Dra Maria Alencar",
-                            'specialty' => "Psquiatria",
+    #[OA\Get(
+        path: '/api/professional',
+        summary: 'Lista todos os profissionais',
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Lista todos os profissionais',
+                content: new OA\JsonContent(
+                    type: 'array',
+                    items: new OA\Items(
+                        properties: [
+                            new OA\Property(property: 'id', type: 'string', example: "11111111111"),
+                            new OA\Property(property: 'name', type: 'string', example: "Dr Guilherme de Paula"),
+                            new OA\Property(property: 'specialty', type: 'string', example: "Clinico Geral"),
                         ]
+                    ),
+                    examples: [
+                        new OA\Examples(
+                            example: 'multiple_professional_example',
+                            summary: 'Exemplo de múltiplos profissionais na resposta',
+                            value: [ 
+                                [
+                                    'id' => "11111111111",
+                                    'name' => "Dr Guilherme de Paula",
+                                    'specialty' => "Clinico Geral",
+                                ],
+                                [
+                                    'id' => "22222222222",
+                                    'name' => "Dra Maria Alencar",
+                                    'specialty' => "Psquiatria",
+                                ]
+                            ]
+                        )
                     ]
                 )
-            ]
-        )
+            )
+        ]
     )]
     public function index(ProfessionalRepository $repo): JsonResponse
     {
@@ -51,37 +60,34 @@ final class ProfessionalController extends AbstractController
     }
 
     #[Route('', methods: ['POST'])]
-    #[OA\Parameter(
-        name: 'id',
-        in: 'path',
-        required: true,
-        description: 'ID do profissional (CPF)',
-        example: "11111111111"
-    )]
-    #[OA\Parameter(
-        name: 'name',
-        in: 'path',
-        required: true,
-        description: 'Nome do profissional',
-        example: "Dr Guilherme de Paula"
-    )]
-    #[OA\Parameter(
-        name: 'specialty',
-        in: 'path',
-        required: true,
-        description: 'Especialidade Profissional',
-        example: "Clinico Geral"
-    )]
-    #[OA\Response(
-        response: 201,
-        description: 'Retorna as informações do profissional',
-        content: new OA\JsonContent(
-            properties: [
-                new OA\Property(property: 'id', type: 'string', example: "11111111111"),
-                new OA\Property(property: 'name', type: 'string', example: "Dr Guilherme de Paula"),
-                new OA\Property(property: 'specialty', type: 'string', example: "Clinico Geral"),
-            ]
-        )
+    #[OA\Post(
+        path: '/api/professional',
+        summary: 'Cria um novo profissional',
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                required: ['id', 'name', 'specialty'],
+                properties: [
+                    new OA\Property(property: 'id', type: 'string', example: "11111111111"),
+                    new OA\Property(property: 'name', type: 'string', example: "Dr Guilherme de Paula"),
+                    new OA\Property(property: 'specialty', type: 'string', example: "Clinico Geral"),
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(
+                response: 201,
+                description: 'Retorna as informações do profissional',
+                content: new OA\JsonContent(
+                    type: 'object',
+                    properties: [
+                        new OA\Property(property: 'id', type: 'string', example: "11111111111"),
+                        new OA\Property(property: 'name', type: 'string', example: "Dr Guilherme de Paula"),
+                        new OA\Property(property: 'specialty', type: 'string', example: "Clinico Geral"),
+                    ]
+                )
+            )
+        ]
     )]
     public function create(Request $request, EntityManagerInterface $em): JsonResponse
     {
@@ -100,23 +106,33 @@ final class ProfessionalController extends AbstractController
     }
 
     #[Route('/{id}', methods: ['GET'])]
-     #[OA\Parameter(
-        name: 'id',
-        in: 'path',
-        required: true,
-        description: 'ID do profissional (CPF)',
-        example: "11111111111"
-    )]
-    #[OA\Response(
-        response: 200,
-        description: 'Retorna as informações de um profissioanl',
-        content: new OA\JsonContent(
-            properties: [
-                new OA\Property(property: 'id', type: 'string', example: "11111111111"),
-                new OA\Property(property: 'name', type: 'string', example: "Dr Guilherme de Paula"),
-                new OA\Property(property: 'specialty', type: 'string', example: "Clinico Geral"),
-            ]
-        )
+    #[OA\Get(
+        path: '/api/professional/{id}',
+        summary: 'Busca um profissional pelo ID (CPF)',
+        parameters: [
+            new OA\Parameter(
+                name: 'id',
+                in: 'path',
+                required: true,
+                description: 'ID do profissional (CPF)',
+                schema: new OA\Schema(type: 'string'),
+                example: '11111111111'
+            )
+        ],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Retorna as informações de um profissional',
+                content: new OA\JsonContent(
+                    type: 'object',
+                    properties: [
+                        new OA\Property(property: 'id', type: 'string', example: "11111111111"),
+                        new OA\Property(property: 'name', type: 'string', example: "Dr Guilherme de Paula"),
+                        new OA\Property(property: 'specialty', type: 'string', example: "Clinico Geral"),
+                    ]
+                )
+            )
+        ]
     )]
     public function show(Professional $professional): JsonResponse
     {
@@ -124,37 +140,43 @@ final class ProfessionalController extends AbstractController
     }
 
     #[Route('/{id}', methods: ['PUT'])]
-    #[OA\Parameter(
-        name: 'id',
-        in: 'path',
-        required: true,
-        description: 'ID do profissional (CPF)',
-        example: "11111111111"
-    )]
-    #[OA\Parameter(
-        name: 'name',
-        in: 'path',
-        required: false,
-        description: 'Nome do profissional',
-        example: "Dr Guilherme de Paula"
-    )]
-    #[OA\Parameter(
-        name: 'specialty',
-        in: 'path',
-        required: false,
-        description: 'Especialidade Profissional',
-        example: "Clinico Geral"
-    )]
-    #[OA\Response(
-        response: 200,
-        description: 'Retorna as informações do cliente',
-        content: new OA\JsonContent(
-            properties: [
-                new OA\Property(property: 'id', type: 'string', example: "11111111111"),
-                new OA\Property(property: 'name', type: 'string', example: "Dr Guilherme de Paula"),
-                new OA\Property(property: 'specialty', type: 'string', example: "Clinico Geral"),
-            ]
-        )
+     #[OA\Put(
+        path: '/api/professional/{id}',
+        summary: 'Atualiza os dados de um profissional pelo ID (CPF)',
+        parameters: [
+            new OA\Parameter(
+                name: 'id',
+                in: 'path',
+                required: true,
+                description: 'ID do profissional (CPF)',
+                schema: new OA\Schema(type: 'string'),
+                example: '11111111111'
+            )
+        ],
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                type: 'object',
+                properties: [
+                    new OA\Property(property: 'name', type: 'string', example: "Dr Guilherme de Paula"),
+                    new OA\Property(property: 'specialty', type: 'string', example: "Clinico Geral"),
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Retorna as informações atualizadas do profissional',
+                content: new OA\JsonContent(
+                    type: 'object',
+                    properties: [
+                        new OA\Property(property: 'id', type: 'string', example: "11111111111"),
+                        new OA\Property(property: 'name', type: 'string', example: "Dr Guilherme de Paula"),
+                        new OA\Property(property: 'specialty', type: 'string', example: "Clinico Geral"),
+                    ]
+                )
+            )
+        ]
     )]
     public function update(Request $request, Professional $professional, EntityManagerInterface $em): JsonResponse
     {
@@ -169,16 +191,25 @@ final class ProfessionalController extends AbstractController
     }
 
     #[Route('/{id}', methods: ['DELETE'])]
-    #[OA\Parameter(
-        name: 'id',
-        in: 'path',
-        required: true,
-        description: 'ID do profissional (CPF)',
-        example: "11111111111"
-    )]
-    #[OA\Response(
-        response: 204,
-        description: 'Retorna um json vazio',
+    #[OA\Delete(
+        path: '/api/professional/{id}',
+        summary: 'Remove um profissional pelo ID (CPF)',
+        parameters: [
+            new OA\Parameter(
+                name: 'id',
+                in: 'path',
+                required: true,
+                description: 'ID do profissional (CPF)',
+                schema: new OA\Schema(type: 'string'),
+                example: '11111111111'
+            )
+        ],
+        responses: [
+            new OA\Response(
+                response: 204,
+                description: 'Profissional removido com sucesso (sem conteúdo)'
+            )
+        ]
     )]
     public function delete(Professional $professional, EntityManagerInterface $em): JsonResponse
     {
