@@ -1,4 +1,4 @@
-# teste da Splitpay
+# Teste da Splitpay
 Teste de aplicação para a vaga de Desenvolvedor Junior
 
 ## Candidato
@@ -26,4 +26,4 @@ ServiceCare = Atendimento Serviço
 4. Aguardar a criação do container
 
 ## Documentação das APIs
-[Documentação](http://localhost:8000/api/doc)
+[http://localhost:8000/api/doc](http://localhost:8000/api/doc)
