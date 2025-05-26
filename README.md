@@ -6,14 +6,23 @@ Teste de aplicação para a vaga de Desenvolvedor Junior
 
 ## Informações Basicas
 O projeto foi desenvolvido em inglês, para uma maior universalização, tendo as entidades:
+
 Client = Cliente
+
 Payment = Pagamento
+
 Product = Produto
+
 Professional = Profissional
+
 Revenue = Receita
+
 Service = Serviço
+
 ProfessionalCare = Atendimento Profissional
+
 ProductCare = Atendimento Produto
+
 ServiceCare = Atendimento Serviço
 
 ## Diagrama Entidade Relacionamento
