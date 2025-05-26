@@ -1,3 +1,5 @@
+-- Criação de Tabelas
+
 create table client (
     id varchar(11) primary key,
     name varchar(30) not null,
@@ -63,3 +65,33 @@ create table servicecare (
     foreign key (care_id) references professionalcare(id) on delete cascade,
     foreign key (service_id) references service(id)
 );
+
+
+-- População de Banco de Dados
+
+insert into client values ('11111111111', 'José da Silva', 'jose@teste.com', '(31) 99999-9999');
+insert into client values ('22222222222', 'Maria Oliveira', 'maria@teste.com', '(31) 88888-8888');
+
+insert into client values ('11111111111', 'Dr Guilherme de Paula', 'Clinico Geral');
+insert into client values ('22222222222', 'Dra Maria Alencar', 'Psquiatria');
+
+insert into product values (10, 'Dipirona 1mg', 15.3);
+insert into product values (11, 'Histamin 2mg', 11.99);
+
+insert into service values (10, 'Consulta', 120);
+insert into service values (11, 'Exame', 65.25);
+
+insert into revenue values (10, '25/05/2025');
+insert into revenue values (11, '24/05/2025');
+
+insert into professionalcare values (10, 10, '11111111111', '22222222222', '25/05/2025');
+insert into professionalcare values (11, 11, '22222222222', '11111111111', '25/05/2025');
+
+insert into payment values (10, 10, 150.95, 'PIX', '25/05/2025');
+insert into payment values (11, 10, 145.32, 'DEBITO', '24/05/2025');
+
+insert into productcare values (10, 10);
+insert into productcare values (10, 11);
+
+insert into servicecare values (10, 10);
+insert into servicecare values (11, 10);
