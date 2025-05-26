@@ -1,8 +1,8 @@
 create table client (
     id varchar(11) primary key,
     name varchar(30) not null,
-    email varchar(255),
-    phone varchar(20)
+    email varchar(255) unique,
+    phone varchar(20) unique
 );
 
 create table professional (
@@ -44,7 +44,8 @@ create table payment (
     revenue_id int not null,
     amount decimal(10, 2) not null,
     method varchar(20),
-    dt_payment datetime not null
+    dt_payment datetime not null,
+    foreign key (revenue_id) references revenue(id) on delete cascade,
 );
 
 create table productcare (
