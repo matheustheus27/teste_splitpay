@@ -37,7 +37,7 @@ final class ProfessionalCareController extends AbstractController
                             'revenue_id' => 20,
                             'client_id' => "11111111111",
                             'professional_id' => "33333333333",
-                            'dt_service' => "(31) 99999-9999"
+                            'dt_service' => "24/05/2025"
                         ],
                         [
                             'id' => 11,
